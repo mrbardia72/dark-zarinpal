@@ -123,6 +123,7 @@ func (zarinpal *Zarinpal) NewPaymentRequest(amount int, callbackURL, description
 		err = errors.New("description should not be empty")
 		return
 	}
+
 	paymentRequest := paymentRequestReqBody{
 		MerchantID:  zarinpal.MerchantID,
 		Amount:      amount,
@@ -136,10 +137,12 @@ func (zarinpal *Zarinpal) NewPaymentRequest(amount int, callbackURL, description
 	if err != nil {
 		return
 	}
+
 	statusCode = resp.Status
+	//email = paymentRequest.Email
 	if resp.Status == 100 {
 		authority = resp.Authority
-		paymentURL = zarinpal.PaymentEndpoint + resp.Authority
+		paymentURL = zarinpal.PaymentEndpoint + resp.Authority + paymentRequest.Email
 	} else {
 		err = errors.New(strconv.Itoa(resp.Status))
 	}

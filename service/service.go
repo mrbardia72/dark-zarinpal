@@ -67,7 +67,13 @@ func Bank(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	paymentUrl, authority, statusCode, err := zarinpal.NewPaymentRequest(intPrice, "http://localhost"+config.SERVER_PORT+"/CallBack"+price, "پرداخت تست تاپ لرن", "", "")
+	paymentUrl, authority, statusCode, err := zarinpal.NewPaymentRequest(
+		intPrice,
+		"http://localhost"+config.SERVER_PORT+"/CallBack"+price,
+		"پرداخت دارک کد",
+		"darkcode@gmail.com",
+		"09360750299",
+		)
 	if err != nil {
 		if statusCode == -3 {
 			helpers.LogWriteHeader(w, "مبلغ قابل پرداخت نیست.", http.StatusBadRequest)
@@ -78,7 +84,7 @@ func Bank(w http.ResponseWriter, r *http.Request) {
 	}
 	//Create Record in DB
 	fmt.Println("PaymentURL: ", paymentUrl, " statusCode : ", statusCode, " Authority: ", authority)
-
+	fmt.Println("price",intPrice,"mobile",email)
 	http.Redirect(w, r, paymentUrl, 302)
 }
 

@@ -8,4 +8,5 @@ import (
 func LogWriteHeader(w http.ResponseWriter, msg string, statuscode int) {
 	fmt.Fprintln(w, msg)
 	w.WriteHeader(statuscode)
+	fmt.Println(statuscode)
 }
