@@ -74,6 +74,7 @@ func Bank(w http.ResponseWriter, r *http.Request) {
 		"darkcode@gmail.com",
 		"09360750299",
 		)
+
 	if err != nil {
 		if statusCode == -3 {
 			helpers.LogWriteHeader(w, "مبلغ قابل پرداخت نیست.", http.StatusBadRequest)
