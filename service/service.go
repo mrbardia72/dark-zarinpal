@@ -67,7 +67,7 @@ func Bank(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	paymentUrl, authority, statusCode, err := zarinpal.NewPaymentRequest(
+	paymentUrl, authority,emailUser,descriptionUser,mobileUser, statusCode, err := zarinpal.NewPaymentRequest(
 		intPrice,
 		"http://localhost"+config.SERVER_PORT+"/CallBack"+price,
 		"پرداخت دارک کد",
@@ -84,7 +84,7 @@ func Bank(w http.ResponseWriter, r *http.Request) {
 	}
 	//Create Record in DB
 	fmt.Println("PaymentURL: ", paymentUrl, " statusCode : ", statusCode, " Authority: ", authority)
-	fmt.Println("price",intPrice,"mobile",email)
+	fmt.Println("Amount",intPrice,"emailUser",emailUser,"descriptionUser",descriptionUser,"mobileUser",mobileUser)
 	http.Redirect(w, r, paymentUrl, 302)
 }
 

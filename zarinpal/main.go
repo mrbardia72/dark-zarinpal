@@ -110,7 +110,7 @@ func NewZarinpal(merchantID string, sandbox bool) (*Zarinpal, error) {
 // on their end and you can check the error code and its reason
 // based on their documentation placed in
 // https://github.com/ZarinPal-Lab/Documentation-PaymentGateway/archive/master.zip
-func (zarinpal *Zarinpal) NewPaymentRequest(amount int, callbackURL, description, email, mobile string) (paymentURL, authority string, statusCode int, err error) {
+func (zarinpal *Zarinpal) NewPaymentRequest(amount int, callbackURL, description, email, mobile string) (paymentURL, authority,emailUser,descriptionUser,mobileUser string, statusCode int, err error) {
 	if amount < 1 {
 		err = errors.New("amount must be a positive number")
 		return
@@ -142,7 +142,10 @@ func (zarinpal *Zarinpal) NewPaymentRequest(amount int, callbackURL, description
 	//email = paymentRequest.Email
 	if resp.Status == 100 {
 		authority = resp.Authority
-		paymentURL = zarinpal.PaymentEndpoint + resp.Authority + paymentRequest.Email
+		paymentURL = zarinpal.PaymentEndpoint + resp.Authority
+		emailUser = paymentRequest.Email
+		descriptionUser = paymentRequest.Description
+		mobileUser = paymentRequest.Mobile
 	} else {
 		err = errors.New(strconv.Itoa(resp.Status))
 	}
