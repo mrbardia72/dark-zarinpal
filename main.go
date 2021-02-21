@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./routers"
+	"github.com/mrbardia72/dark-zarinpal/routers"
 )
 
 func main() {

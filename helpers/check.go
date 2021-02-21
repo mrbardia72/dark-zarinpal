@@ -1,9 +1,9 @@
 package helpers
 
 import (
-	"../config"
-	"../zarinpal"
 	"github.com/gorilla/mux"
+	"github.com/mrbardia72/dark-zarinpal/config"
+	"github.com/mrbardia72/dark-zarinpal/zarinpal"
 	"net/http"
 	"strconv"
 )

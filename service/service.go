@@ -1,9 +1,9 @@
 package service
 
 import (
-	"../config"
-	"../helpers"
 	"fmt"
+	"github.com/mrbardia72/dark-zarinpal/config"
+	"github.com/mrbardia72/dark-zarinpal/helpers"
 	"net/http"
 )
 

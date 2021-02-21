@@ -1,9 +1,9 @@
 package routers
 
 import (
-	"../config"
-	"../service"
 	"github.com/gorilla/mux"
+	"github.com/mrbardia72/dark-zarinpal/config"
+	"github.com/mrbardia72/dark-zarinpal/service"
 	"log"
 	"net/http"
 )
