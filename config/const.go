@@ -1,0 +1,7 @@
+package config
+
+const (
+	SERVER_PORT = ":8383"
+	MERCHAND_ID = "111111222222333333444444555555666666"
+	SANDBOX     = true
+)
