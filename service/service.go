@@ -5,6 +5,7 @@ import (
 	"github.com/mrbardia72/dark-zarinpal/config"
 	"github.com/mrbardia72/dark-zarinpal/helpers"
 	"net/http"
+	"time"
 )
 
 func CallBack(w http.ResponseWriter, r *http.Request) {
@@ -85,7 +86,10 @@ func Bank(w http.ResponseWriter, r *http.Request) {
 	}
 	//Create Record in DB
 	fmt.Println("PaymentURL: ", paymentUrl, " statusCode : ", statusCode, " Authority: ", authority)
-	fmt.Println("Amount",intPrice,"emailUser",emailUser,"descriptionUser",descriptionUser,"mobileUser",mobileUser)
+	date_now := time.Now().Format("02-01-2006")
+	time_now := time.Now().Format("15:04:05")
+
+	fmt.Println("Amount-user",intPrice,"email-User",emailUser,"description-User",descriptionUser,"mobile-User",mobileUser,"data-now",date_now,"time-now",time_now)
 	http.Redirect(w, r, paymentUrl, 302)
 }
 
