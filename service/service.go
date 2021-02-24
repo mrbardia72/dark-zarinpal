@@ -45,9 +45,10 @@ func CallBack(w http.ResponseWriter, r *http.Request) {
 		helpers.LogWriteHeader(w, "خطا در پرداخت.", http.StatusInternalServerError)
 		return
 	}
-
-	fmt.Fprintln(w, "پرداخت موفقیت آمیز بود . شماره پیگیری : ", refId)
-	fmt.Println(w, "Payment Verified : ", verified, " ,  refId: ", refId, " statusCode: ", statusCode)
+	date_now := time.Now().Format("02-01-2006")
+	time_now := time.Now().Format("15:04:05")
+	fmt.Fprintln(w, "Payment Verified : ", verified, " ,  refId: ", refId, " statusCode: ", statusCode,"data-now",date_now,"time-now",time_now)
+	fmt.Println(w, "Payment Verified : ", verified, " ,  refId: ", refId, " statusCode: ", statusCode,"data-now",date_now,"time-now",time_now)
 }
 
 
@@ -82,6 +83,7 @@ func Bank(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		helpers.LogWriteHeader(w, "خطایی در پرداخت رخ داده است.", http.StatusBadRequest)
+
 		return
 	}
 	//Create Record in DB
