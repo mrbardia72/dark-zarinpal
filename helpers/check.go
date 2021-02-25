@@ -8,8 +8,6 @@ import (
 	"strconv"
 )
 
-
-
 func CheckPaymentErr(w http.ResponseWriter) (*zarinpal.Zarinpal, error, bool) {
 	zarinpal, err := zarinpal.NewZarinpal(config.MERCHAND_ID, config.SANDBOX)
 	if err != nil {

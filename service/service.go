@@ -1,12 +1,17 @@
 package service
 
 import (
+	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/mrbardia72/dark-zarinpal/config"
 	"github.com/mrbardia72/dark-zarinpal/helpers"
+	"github.com/mrbardia72/dark-zarinpal/models"
+	"log"
 	"net/http"
 	"time"
 )
+var zarinpalCollection = config.DbConfig().Database("zarinpal").Collection("logpay")
 
 func CallBack(w http.ResponseWriter, r *http.Request) {
 
@@ -47,8 +52,24 @@ func CallBack(w http.ResponseWriter, r *http.Request) {
 	}
 	date_now := time.Now().Format("02-01-2006")
 	time_now := time.Now().Format("15:04:05")
-	fmt.Fprintln(w, "Payment Verified : ", verified, " ,  refId: ", refId, " statusCode: ", statusCode,"data-now",date_now,"time-now",time_now)
-	fmt.Println(w, "Payment Verified : ", verified, " ,  refId: ", refId, " statusCode: ", statusCode,"data-now",date_now,"time-now",time_now)
+
+	payment := models.Payment{
+		Status: statusCode ,
+		Verified:verified,
+		Refid:refId,
+		Date:date_now,
+		Time:time_now,
+	}
+
+	var jsonPayment []byte
+	jsonPayment, _ = json.Marshal(payment)
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(string(jsonPayment))
+
+	fmt.Fprintln(w, "پرداخت یا موقفیت انجام شد : ", " ,  کدپیگیری: ", refId)
+	//fmt.Println(w, "Payment Verified : ", verified, " ,  refId: ", refId, " statusCode: ", statusCode,"data-now",date_now,"time-now",time_now)
 }
 
 
@@ -86,12 +107,36 @@ func Bank(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
-	//Create Record in DB
-	fmt.Println("PaymentURL: ", paymentUrl, " statusCode : ", statusCode, " Authority: ", authority)
+
 	date_now := time.Now().Format("02-01-2006")
 	time_now := time.Now().Format("15:04:05")
 
-	fmt.Println("Amount-user",intPrice,"email-User",emailUser,"description-User",descriptionUser,"mobile-User",mobileUser,"data-now",date_now,"time-now",time_now)
+	logpay := models.Logpay{
+		Status: statusCode ,
+		Authority:authority,
+		Amount:intPrice,
+		Email:emailUser,
+		Description:descriptionUser,
+		Mobile:mobileUser,
+		Date:date_now,
+		Time:time_now,
+	}
+
+	var jsonLogPay []byte
+	jsonLogPay, _ = json.Marshal(logpay)
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(string(jsonLogPay))
+
+	//mongo
+	ctx := context.Background()
+	insertResult, err := zarinpalCollection.InsertOne(ctx, &logpay)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Inserted a single document: ", insertResult)
+
 	http.Redirect(w, r, paymentUrl, 302)
 }
 
