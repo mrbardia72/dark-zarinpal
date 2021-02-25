@@ -11,7 +11,8 @@ import (
 	"net/http"
 	"time"
 )
-var zarinpalCollection = config.DbConfig().Database("zarinpal").Collection("logpay")
+var logpayCollection = config.DbConfig().Database("zarinpal").Collection("logpay")
+var paymentCollection = config.DbConfig().Database("zarinpal").Collection("payment")
 
 func CallBack(w http.ResponseWriter, r *http.Request) {
 
@@ -67,6 +68,13 @@ func CallBack(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 	fmt.Println(string(jsonPayment))
+
+	ctx := context.Background()
+	insertResult, err := paymentCollection.InsertOne(ctx, &payment)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Inserted a single document: ", insertResult)
 
 	fmt.Fprintln(w, "پرداخت یا موقفیت انجام شد : ", " ,  کدپیگیری: ", refId)
 	//fmt.Println(w, "Payment Verified : ", verified, " ,  refId: ", refId, " statusCode: ", statusCode,"data-now",date_now,"time-now",time_now)
@@ -131,7 +139,7 @@ func Bank(w http.ResponseWriter, r *http.Request) {
 
 	//mongo
 	ctx := context.Background()
-	insertResult, err := zarinpalCollection.InsertOne(ctx, &logpay)
+	insertResult, err := logpayCollection.InsertOne(ctx, &logpay)
 	if err != nil {
 		log.Fatal(err)
 	}
