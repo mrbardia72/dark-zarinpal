@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"github.com/mrbardia72/dark-zarinpal/config"
 	"github.com/mrbardia72/dark-zarinpal/helpers"
@@ -62,22 +61,22 @@ func CallBack(w http.ResponseWriter, r *http.Request) {
 		Time:time_now,
 	}
 
-	var jsonPayment []byte
-	jsonPayment, _ = json.Marshal(payment)
-	if err != nil {
-		log.Println(err)
-	}
-	fmt.Println(string(jsonPayment))
+	//var jsonPayment []byte
+	//jsonPayment, _ = json.Marshal(payment)
+	//if err != nil {
+	//	log.Println(err)
+	//}
+	//fmt.Println(string(jsonPayment))
 
 	ctx := context.Background()
 	insertResult, err := paymentCollection.InsertOne(ctx, &payment)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Inserted a single document: ", insertResult)
 
+	fmt.Println("Inserted a single document: ", insertResult)
 	fmt.Fprintln(w, "پرداخت یا موقفیت انجام شد : ", " ,  کدپیگیری: ", refId)
-	//fmt.Println(w, "Payment Verified : ", verified, " ,  refId: ", refId, " statusCode: ", statusCode,"data-now",date_now,"time-now",time_now)
+
 }
 
 
@@ -130,12 +129,12 @@ func Bank(w http.ResponseWriter, r *http.Request) {
 		Time:time_now,
 	}
 
-	var jsonLogPay []byte
-	jsonLogPay, _ = json.Marshal(logpay)
-	if err != nil {
-		log.Println(err)
-	}
-	fmt.Println(string(jsonLogPay))
+	//var jsonLogPay []byte
+	//jsonLogPay, _ = json.Marshal(logpay)
+	//if err != nil {
+	//	log.Println(err)
+	//}
+	//fmt.Println(string(jsonLogPay))
 
 	//mongo
 	ctx := context.Background()
@@ -144,9 +143,5 @@ func Bank(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	fmt.Println("Inserted a single document: ", insertResult)
-
 	http.Redirect(w, r, paymentUrl, 302)
 }
-
-
-
