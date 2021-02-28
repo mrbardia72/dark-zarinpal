@@ -87,23 +87,23 @@ func GetAllLogPaymet(w http.ResponseWriter, r *http.Request)  {
 
 	ctx := context.Background()
 	w.Header().Set("Content-Type", "application/json")
-	var results []primitive.M                                   //slice for multiple documents
+	var results []primitive.M
 
-	cur, err := logpayCollection.Find(ctx, bson.D{{}}) //returns a *mongo.Cursor
+	cur, err := logpayCollection.Find(ctx, bson.D{{}})
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	for cur.Next(ctx) { //Next() gets the next document for corresponding cursor
+	for cur.Next(ctx) {
 
 		var elem primitive.M
 		err := cur.Decode(&elem)
 		if err != nil {
 			log.Fatal(err)
 		}
-		results = append(results, elem) // appending document pointed by Next()
+		results = append(results, elem)
 	}
-	cur.Close(context.Background()) // close the cursor once stream of documents has exhausted
+	cur.Close(context.Background())
 	fmt.Println("get all log payment information")
 	json.NewEncoder(w).Encode(results)
 
