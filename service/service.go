@@ -2,14 +2,18 @@ package service
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/mrbardia72/dark-zarinpal/config"
 	"github.com/mrbardia72/dark-zarinpal/helpers"
 	"github.com/mrbardia72/dark-zarinpal/models"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"log"
 	"net/http"
 	"time"
 )
+
 var logpayCollection = config.DbConfig().Database("zarinpal").Collection("logpay")
 var paymentCollection = config.DbConfig().Database("zarinpal").Collection("payment")
 
@@ -79,6 +83,31 @@ func CallBack(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func GetAllLogPaymet(w http.ResponseWriter, r *http.Request)  {
+
+	ctx := context.Background()
+	w.Header().Set("Content-Type", "application/json")
+	var results []primitive.M                                   //slice for multiple documents
+
+	cur, err := logpayCollection.Find(ctx, bson.D{{}}) //returns a *mongo.Cursor
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	for cur.Next(ctx) { //Next() gets the next document for corresponding cursor
+
+		var elem primitive.M
+		err := cur.Decode(&elem)
+		if err != nil {
+			log.Fatal(err)
+		}
+		results = append(results, elem) // appending document pointed by Next()
+	}
+	cur.Close(context.Background()) // close the cursor once stream of documents has exhausted
+	fmt.Println("get all log payment information")
+	json.NewEncoder(w).Encode(results)
+
+}
 
 func Bank(w http.ResponseWriter, r *http.Request) {
 
